@@ -1,0 +1,35 @@
+# Examples
+
+## Setup
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.5.1"},
+  {:kino_lab, "~> 0.1.0-dev", github: "jonatanklosko/kino_lab"}
+])
+```
+
+## Kino.YouTube
+
+To embed a YouTube video all you need is its id. The id is usually at the
+end of YouTube URL, as in `https://www.youtube.com/watch?v={id}` or
+`https://youtu.be/{id}`.
+
+```elixir
+Kino.YouTube.new("2OHFgjuy3DI")
+```
+
+## Kino.CameraProcessor
+
+This kino accesses the web camera, streams frames to the server
+to process them with your Elixir code, then renders it back into
+the page. It supports multiple users as well!
+
+```elixir
+Kino.CameraProcessor.new(fn binary ->
+  binary
+  # |> magic()
+end)
+```
+
+Now we can bring in our favourite image processing library and do the magic.

@@ -1,0 +1,18 @@
+.clients {
+  display: flex;
+  flex-direction: column;
+}
+
+.client {
+  display: flex;
+  justify-content: center;
+}
+
+.frame-container {
+  display: flex;
+  width: 50%;
+}
+
+img, video {
+  max-width: 100%;
+}
