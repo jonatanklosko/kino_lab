@@ -2,7 +2,7 @@ defmodule Kino.CameraProcessor do
   @moduledoc """
   A widget for processing feed from the web camera.
 
-  Frames are provided as binary PNG images and processed with
+  Frames are provided as binary JPEG images and processed with
   the given function. The widget displays live camera feed as
   well as the processed frames.
 
@@ -26,7 +26,7 @@ defmodule Kino.CameraProcessor do
         |> CV.imdecode!(CV.cv_IMREAD_UNCHANGED())
         |> CV.cvtColor!(CV.cv_COLOR_BGR2GRAY())
         |> CV.blur!([10, 10])
-        |> then(&CV.imencode!(".png", &1))
+        |> then(&CV.imencode!(".jpeg", &1))
         |> IO.iodata_to_binary()
       end)
   """
@@ -40,21 +40,27 @@ defmodule Kino.CameraProcessor do
   Creates a new camera processor widget.
 
   Expects a function that synchronously processes a binary image
-  in the PNG format.
+  in the JPEG format.
 
   ## Options
 
-    * `:max_fps` - the upper limit on processed frames per second
+    * `:max_fps` - the upper limit on processed frames per second.
+      Defaults to `30`
+
+    * `:quality` - the quality parameter of the JPEG format. Must
+      be a number between `1` and `100` (where `100` implies the
+      highest quality and consequently the lowest compression).
+      Defaults to `80`
   """
   @spec new((binary() -> binary()), keyword()) :: t()
   def new(process_fun, opts \\ []) when is_function(process_fun, 1) and is_list(opts) do
-    opts = Keyword.validate!(opts, max_fps: 30)
-    Kino.JS.Live.new(__MODULE__, {process_fun, opts[:max_fps]})
+    opts = Keyword.validate!(opts, max_fps: 30, quality: 80)
+    Kino.JS.Live.new(__MODULE__, {process_fun, opts[:max_fps], opts[:quality]})
   end
 
   @impl true
-  def init({process_fun, max_fps}, ctx) do
-    {:ok, assign(ctx, process_fun: process_fun, max_fps: max_fps, clients: [])}
+  def init({process_fun, max_fps, quality}, ctx) do
+    {:ok, assign(ctx, process_fun: process_fun, max_fps: max_fps, quality: quality, clients: [])}
   end
 
   @impl true
@@ -64,7 +70,8 @@ defmodule Kino.CameraProcessor do
     info = %{
       client_id: client_id,
       clients: ctx.assigns.clients,
-      max_fps: ctx.assigns.max_fps
+      max_fps: ctx.assigns.max_fps,
+      quality: ctx.assigns.quality
     }
 
     broadcast_event(ctx, "client_join", %{client_id: client_id})
@@ -73,21 +80,18 @@ defmodule Kino.CameraProcessor do
   end
 
   @impl true
-  def handle_event("frame", %{"data" => data, "client_id" => client_id}, ctx) do
+  def handle_event("frame", {:binary, %{"client_id" => client_id}, binary}, ctx) do
     # Don't send the original data if there's only a single client
-    original = if length(ctx.assigns.clients) == 1, do: nil, else: data
+    original = if length(ctx.assigns.clients) == 1, do: <<>>, else: binary
 
-    processed =
-      data
-      |> Base.decode64!()
-      |> ctx.assigns.process_fun.()
-      |> Base.encode64()
+    processed = ctx.assigns.process_fun.(binary)
 
-    broadcast_event(ctx, "frame", %{
-      client_id: client_id,
-      original: original,
-      processed: processed
-    })
+    broadcast_event(
+      ctx,
+      "frame",
+      {:binary, %{client_id: client_id, original_size: byte_size(original)},
+       original <> processed}
+    )
 
     {:noreply, ctx}
   end
