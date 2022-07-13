@@ -20,7 +20,7 @@ defmodule KinoLab.MixProject do
   defp deps do
     [
       {:kino, "~> 0.5.0"},
-      {:ex_doc, "~> 0.24", only: :dev, runtime: false}
+      {:ex_doc, "~> 0.28", only: :dev, runtime: false}
     ]
   end
 

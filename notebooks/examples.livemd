@@ -5,36 +5,17 @@
 ```elixir
 Mix.install([
   {:kino, "~> 0.5.1"},
-  {:kino_lab, "~> 0.1.0-dev", github: "jonatanklosko/kino_lab"}
+  # {:kino_lab, "~> 0.1.0-dev", github: "jonatanklosko/kino_lab"}
+  {:kino_lab, path: "./"}
 ])
 ```
 
 ## Kino.YouTube
 
-To embed a YouTube video all you need is its id. The id is usually at the
-end of YouTube URL, as in `https://www.youtube.com/watch?v={id}` or
-`https://youtu.be/{id}`.
-
-```elixir
-Kino.YouTube.new("2OHFgjuy3DI")
-```
-
-You may also use the full URL instead.
+To embed a YouTube video, provide the YouTube URL in the format `https://www.youtube.com/watch?v={id}` or `https://youtu.be/{id}`.
 
 ```elixir
 Kino.YouTube.new("https://www.youtube.com/watch?v=2OHFgjuy3DI")
-```
-
-Or a shortened URL.
-
-```elixir
-Kino.YouTube.new("https://youtu.be/2OHFgjuy3DI")
-```
-
-Timestamps are also supported using `?t=`.
-
-```elixir
-Kino.YouTube.new("https://youtu.be/2OHFgjuy3DI?t=3600")
 ```
 
 ## Kino.Kroki
