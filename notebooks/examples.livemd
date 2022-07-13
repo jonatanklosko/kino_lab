@@ -19,6 +19,24 @@ end of YouTube URL, as in `https://www.youtube.com/watch?v={id}` or
 Kino.YouTube.new("2OHFgjuy3DI")
 ```
 
+You may also use the full URL instead.
+
+```elixir
+Kino.YouTube.new("https://www.youtube.com/watch?v=2OHFgjuy3DI")
+```
+
+Or a shortened URL.
+
+```elixir
+Kino.YouTube.new("https://youtu.be/2OHFgjuy3DI")
+```
+
+Timestamps are also supported using `?t=`.
+
+```elixir
+Kino.YouTube.new("https://youtu.be/2OHFgjuy3DI?t=3600")
+```
+
 ## Kino.Kroki
 
 [Kroki](https://kroki.io) exposes a unified API for rendering various diagram types.
