@@ -11,12 +11,10 @@ Mix.install([
 
 ## Kino.YouTube
 
-To embed a YouTube video all you need is its id. The id is usually at the
-end of YouTube URL, as in `https://www.youtube.com/watch?v={id}` or
-`https://youtu.be/{id}`.
+To embed a YouTube video, provide the YouTube URL in the format `https://www.youtube.com/watch?v={id}` or `https://youtu.be/{id}`.
 
 ```elixir
-Kino.YouTube.new("2OHFgjuy3DI")
+Kino.YouTube.new("https://www.youtube.com/watch?v=2OHFgjuy3DI")
 ```
 
 ## Kino.Kroki
