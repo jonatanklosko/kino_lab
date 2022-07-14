@@ -16,16 +16,17 @@ defmodule Kino.YouTube do
 
   ## Examples
 
-    Provide the video URL in either `https://www.youtube.com/watch?v={id}` or
-    `https://youtu.be/{id}` format.
+  You can pass a regular YouTube URL such as `https://www.youtube.com/watch?v={id}`,
+  or the short version `https://youtu.be/{id}`.
 
-        Kino.YouTube.new("https://www.youtu.be/2OHFgjuy3DI")
+      Kino.YouTube.new("https://www.youtu.be/2OHFgjuy3DI")
 
-        Kino.YouTube.new("https://www.youtube.com/watch?v=2OHFgjuy3DI")
+      Kino.YouTube.new("https://www.youtube.com/watch?v=2OHFgjuy3DI")
 
-    Optionally provide a timestamp using the `t` query parameter.
+  Timestamps are also supported via the `t` query parameter.
 
-        Kino.YouTube.new("https://www.youtube.com/watch?v=2OHFgjuy3DI?t=3600")
+      Kino.YouTube.new("https://www.youtube.com/watch?v=2OHFgjuy3DI&t=3600")
+
   """
   @spec new(String.t()) :: t()
   def new(video_url) when is_binary(video_url) do

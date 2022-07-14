@@ -5,8 +5,7 @@
 ```elixir
 Mix.install([
   {:kino, "~> 0.5.1"},
-  # {:kino_lab, "~> 0.1.0-dev", github: "jonatanklosko/kino_lab"}
-  {:kino_lab, path: "./"}
+  {:kino_lab, "~> 0.1.0-dev", github: "jonatanklosko/kino_lab"}
 ])
 ```
 
